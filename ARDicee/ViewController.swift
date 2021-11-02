@@ -71,7 +71,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if let touch = touches.first {
             let touchLocation = touch.location(in: sceneView) //2D
             let results = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent) //check with 3D if touched a plane
-            
             if let hitResult = results.first {
                 let diceScene = SCNScene(named: "art.scnassets/diceCollada.scn")!
                 if let diceNode = diceScene.rootNode.childNode(withName: "Dice", recursively: true) {
@@ -92,6 +91,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
         }
     }
+    
     
     func roll(dice: SCNNode) {
         let randomX = Float(arc4random_uniform(4)+1) * (Float.pi/2) //only 4 faces on x-axis and multiply 90 degree to show face
@@ -119,10 +119,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         rollAll()
     }
     
+    @IBAction func removeAllDice(_ sender: UIBarButtonItem) {
+        if !diceArray .isEmpty {
+            for dice in diceArray {
+                dice.removeFromParentNode()
+            }
+        }
+    }
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         rollAll()
     }
     
+    //create surface
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         if anchor is ARPlaneAnchor {
             print("plae detected.")
