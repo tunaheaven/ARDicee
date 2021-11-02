@@ -10,7 +10,7 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
-
+    var diceArray = [SCNNode]()
     @IBOutlet var sceneView: ARSCNView!
     
     override func viewDidLoad() {
@@ -81,10 +81,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                         z: hitResult.worldTransform.columns.3.z
                     )
                     sceneView.scene.rootNode.addChildNode(diceNode)
+                    //rondome face
+                    let randomX = Float(arc4random_uniform(4)+1) * (Float.pi/2) //only 4 faces on x-axis and multiply 90 degree to show face
+                    let randomZ = Float(arc4random_uniform(4)+1) * (Float.pi/2)
+                    // no need for y-axis since it won't change the face
+                    diceNode.runAction(
+                        SCNAction.rotateBy(
+                            x: CGFloat(randomX * 5), //multiply 5 for extra spin
+                            y: 0,
+                            z: CGFloat(randomZ * 5),
+                            duration: 0.5
+                        )
+                    )
+                    
+                    
                     print("Dice Placed.")
                 } else {
                     print("Could not Place Dice.")
                 }
+                
             }
         }
     }
